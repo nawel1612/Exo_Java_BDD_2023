@@ -33,7 +33,7 @@
 <h2>Exercice 1 : Comparaison 1</h2>
 <p>Ecrire un programme qui demande à l'utilisateur de saisir 3 valeurs (des chiffres),</br>
 A, B et C et dites nous si la valeur de C est comprise entre A et B.</br>
-<h1>Exercices sur les conditions</h1>
+
 <form action="#" method="post">
     <p>Saisir la valeur A : <input type="text" name="valeurA"></p>
     <p>Saisir la valeur B : <input type="text" name="valeurB"></p>
@@ -42,22 +42,29 @@ A, B et C et dites nous si la valeur de C est comprise entre A et B.</br>
 </form>
 
 <%-- Récupération des valeurs --%>
-<% String valeurA = request.getParameter("valeurA"); %>
-<% String valeurB = request.getParameter("valeurB"); %>
-<% String valeurC = request.getParameter("valeurC"); %>
+<% 
+   String valeurA = request.getParameter("valeurA"); 
+   String valeurB = request.getParameter("valeurB"); 
+   String valeurC = request.getParameter("valeurC"); 
+%>
 
-<% if (valeurA != null && valeurB != null && valeurC != null) { %>
+<%-- Vérification uniquement si les champs ne sont pas vides --%>
+<% if (valeurA != null && !valeurA.isEmpty() 
+    && valeurB != null && !valeurB.isEmpty() 
+    && valeurC != null && !valeurC.isEmpty()) { %>
+
     <% int A = Integer.parseInt(valeurA); %>
     <% int B = Integer.parseInt(valeurB); %>
     <% int C = Integer.parseInt(valeurC); %>
 
-    <%-- Vérification si C est compris entre A et B --%>
     <% if ((C >= A && C <= B) || (C >= B && C <= A)) { %>
         <p>Oui, C est compris entre A et B.</p>
     <% } else { %>
         <p>Non, C n'est pas compris entre A et B.</p>
     <% } %>
+
 <% } %>
+
 
 
 <h2>Exercice 2 : Pair ou Impair ?</h2>
