@@ -85,6 +85,23 @@
 <h2>Exercice 6 : Consonnes et voyelles</h2>
 <p>Ecrire le programme afin de compter les consonnes et les voyelles dans votre texte</p>
 
+<% 
+   int voyelles = 0, consonnes = 0;
+   String texte = chaine.toLowerCase();
+   for (int i = 0; i < texte.length(); i++) {
+       char c = texte.charAt(i);
+       if (Character.isLetter(c)) {
+           if ("aeiouy".indexOf(c) != -1) {
+               voyelles++;
+           } else {
+               consonnes++;
+           }
+       }
+   }
+%>
+<p>Votre texte contient <%= voyelles %> voyelle(s) et <%= consonnes %> consonne(s).</p>
+
+
 <% } %>
 <p><a href="index.html">Retour au sommaire</a></p>
 </body>
