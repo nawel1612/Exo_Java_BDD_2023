@@ -35,23 +35,33 @@
 <h2>Exercice 1 : Combien de 'e' dans notre chaine de charactère ?</h2>
 <p>Ecrire un programme pour compter le nombre de lettre e dans votre chaine de charactères</p>
 
+<% 
+   int compteurE = 0;
+   for (int i = 0; i < chaine.length(); i++) {
+       if (chaine.charAt(i) == 'e' || chaine.charAt(i) == 'E') {
+           compteurE++;
+       }
+   }
+%>
+<p>Il y a <%= compteurE %> lettre(s) 'e' dans votre chaine.</p>
+
+
 <h2>Exercice 2 : Affichage verticale</h2>
 <p>Ecrire le programme pour afficher le texte en vertical</br>
-Exemple : Bonjour</br>
-B</br>
-o</br>
-n</br>
-j</br>
-o</br>
-u</br>
-r</p>
+
+<p>Votre texte en vertical :</p>
+<% for (int i = 0; i < chaine.length(); i++) { %>
+    <%= chaine.charAt(i) %><br/>
+<% } %>
+
 
 <h2>Exercice 3 : Retour à la ligne</h2>
 <p>La présence d'un espace provoque un retour à la ligne </br>
-Exemple : L'hiver sera pluvieux</br>
-L'hiver</br>
-sera</br>
-pluvieux</p>
+
+<p>Votre texte avec retour à la ligne :</p>
+<%= chaine.replace(" ", "<br/>") %>
+
+
 
 <h2>Exercice 4 : Afficher une lettre sur deux</h2>
 <p>Ecrire le programme pour afficher seulement une lettre sur deux de votre texte </br>
