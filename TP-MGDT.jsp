@@ -1,18 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List, java.util.ArrayList, java.time.LocalDate, java.time.format.DateTimeFormatter" %>
 
-<%-- 
-========================================================================
-    PARTIE 1 : DÉCLARATION (Le Modèle POO)
-    Le code ici (<%!) définit la classe Task et les utilitaires.
-    Ceci respecte la contrainte "Créer une classe Java... avec attributs privés" [cite: 13]
-========================================================================
---%>
 <%!
-    /**
-     * Classe interne représentant une Tâche (Modèle).
-     * Elle est définie dans une balise de déclaration JSP.
-     */
     public class Task {
         // Attributs privés
         private String titre;
@@ -47,18 +36,10 @@
 %>
 
 
-<%-- 
-========================================================================
-    PARTIE 2 : SCRIPTLET (Le Contrôleur)
-    Le code ici (<% ... %>) s'exécute à chaque chargement de la page.
-    Il gère la logique : ajout, suppression, complétion.
-========================================================================
---%>
 <%
-    // 1. Récupérer la session HTTP
+   
     HttpSession sessionHttp = request.getSession();
 
-    // 2. Récupérer (ou créer) la liste de tâches en session [cite: 15]
     @SuppressWarnings("unchecked")
     List<Task> taskList = (List<Task>) sessionHttp.getAttribute("taskList");
     if (taskList == null) {
@@ -66,15 +47,12 @@
         sessionHttp.setAttribute("taskList", taskList);
     }
 
-    // 3. Traiter les actions (Ajout, Suppression, Complétion)
     String action = request.getParameter("action");
     boolean listModified = false; // Pour savoir si on doit rediriger
 
     try {
         if (action != null) {
             
-            // --- ACTION : AJOUTER ---
-            // On vérifie aussi que la méthode est POST pour l'ajout
             if (action.equals("add") && request.getMethod().equals("POST")) {
                 String titre = request.getParameter("titre");
                 String description = request.getParameter("description");
@@ -85,11 +63,9 @@
                     dateEcheance = LocalDate.parse(dateStr);
                 }
                 
-                // Ajout à la collection 
                 taskList.add(new Task(titre, description, dateEcheance));
                 listModified = true;
 
-            // --- ACTION : SUPPRIMER ---
             } else if (action.equals("delete")) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 if (id >= 0 && id < taskList.size()) {
@@ -97,7 +73,6 @@
                     listModified = true;
                 }
 
-            // --- ACTION : TERMINER ---
             } else if (action.equals("complete")) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 if (id >= 0 && id < taskList.size()) {
@@ -111,18 +86,12 @@
         // e.printStackTrace(); // Pour le débogage
     }
 
-    // 4. Redirection (Pattern Post-Redirect-Get)
-    // Si la liste a été modifiée (ajout, delete, complete),
-    // on met à jour la session et on redirige vers la même page.
-    // Cela évite la re-soumission du formulaire si l'utilisateur rafraîchit.
     if (listModified) {
         sessionHttp.setAttribute("taskList", taskList);
         response.sendRedirect("TP-MGDT.jsp");
-        return; // TRÈS IMPORTANT: Arrête l'exécution du reste de la page
+        return;
     }
-    
-    // Si on arrive ici, c'est une requête GET normale,
-    // on affiche simplement le HTML ci-dessous.
+
 %>
 
 
@@ -155,7 +124,7 @@
 </head>
 <body>
 
-    <h1>📝 Mini Gestionnaire de Tâches Collaboratif </h1>
+    <h1>Mini Gestionnaire de Tâches Collaboratif </h1>
 
     <h2>Ajouter une Tâche</h2>
     
@@ -179,10 +148,9 @@
 
     <hr style="margin: 30px 0;">
 
-    <h2>📋 Liste des Tâches</h2>
+    <h2>Liste des Tâches</h2>
 
     <% 
-        // 5. Logique d'affichage (Vue)
         if (taskList != null && !taskList.isEmpty()) {
     %>
         <table class="task-list">
@@ -215,29 +183,28 @@
                         <td class="action-links">
                             <%-- Lien pour marquer comme terminée (si ce n'est pas déjà fait) --%>
                             <% if (!tache.isTerminee()) { %>
-                                <a href="TP-MGDT.jsp?action=complete&id=<%= i %>" class="complete">✅ Terminer</a>
+                                <a href="TP-MGDT.jsp?action=complete&id=<%= i %>" class="complete"> Accomplie </a>
                             <% } %>
                             
                             <%-- Lien pour la suppression [cite: 19] --%>
                             <a href="TP-MGDT.jsp?action=delete&id=<%= i %>" 
                                class="delete"
                                onclick="return confirm('Voulez-vous vraiment supprimer cette tâche ?');">
-                                ❌ Supprimer
+                                Supprimer
                             </a>
                         </td>
                     </tr>
                 <% 
-                   } // Fin de la boucle for
+                   } 
                 %>
             </tbody>
         </table>
     <% 
         } else { 
-            // S'il n'y a pas de tâches
     %>
         <p>Aucune tâche n'a été ajoutée pour le moment.</p>
     <% 
-        } // Fin du if
+        } 
     %>
 
 </body>
