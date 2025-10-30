@@ -8,7 +8,6 @@
         private LocalDate dateEcheance;
         private boolean terminee;
 
-        // Ton constructeur (parfait)
         public Task(String t, String d, LocalDate de) {
             titre = t;
             description = d;
@@ -16,45 +15,34 @@
             terminee = false;
         }
 
-        // Tes Getters (corrigés)
         public String getTitre() {
-            return titre; // Corrigé
+            return titre;
         }
 
-        public String getDescription() { // Corrigé
-            return description; // Corrigé
+        public String getDescription() { 
+            return description; 
         }
 
         public LocalDate getDateEcheance() {
-            return dateEcheance; // Corrigé
+            return dateEcheance;
         }
 
         public boolean isTerminee() {
             return terminee;
         }
 
-        // Ton Setter (parfait)
         public void setTerminee(boolean t) {
             terminee = t;
         }
     }
 
-    // Ton Formatter (parfait)
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 %>
 
-
-<%-- 
-========================================================================
-    PARTIE 2 : SCRIPTLET (Le Contrôleur)
-    Cette partie reste identique, elle fonctionne avec ta classe.
-========================================================================
---%>
 <%
-    // 1. Récupérer la session HTTP
+
     HttpSession sessionHttp = request.getSession();
 
-    // 2. Récupérer (ou créer) la liste de tâches en session
     @SuppressWarnings("unchecked")
     List<Task> taskList = (List<Task>) sessionHttp.getAttribute("taskList");
     if (taskList == null) {
@@ -62,14 +50,11 @@
         sessionHttp.setAttribute("taskList", taskList);
     }
 
-    // 3. Traiter les actions (Ajout, Suppression, Complétion)
     String action = request.getParameter("action");
-    boolean listModified = false; // Pour savoir si on doit rediriger
-
+    boolean listModified = false; 
     try {
         if (action != null) {
             
-            // --- ACTION : AJOUTER ---
             if (action.equals("add") && request.getMethod().equals("POST")) {
                 String titre = request.getParameter("titre");
                 String description = request.getParameter("description");
@@ -79,12 +64,10 @@
                 if (dateStr != null && !dateStr.isEmpty()) {
                     dateEcheance = LocalDate.parse(dateStr);
                 }
-                
-                // Appel de ton constructeur (new Task(String, String, LocalDate))
+
                 taskList.add(new Task(titre, description, dateEcheance));
                 listModified = true;
 
-            // --- ACTION : SUPPRIMER ---
             } else if (action.equals("delete")) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 if (id >= 0 && id < taskList.size()) {
@@ -92,7 +75,6 @@
                     listModified = true;
                 }
 
-            // --- ACTION : TERMINER ---
             } else if (action.equals("complete")) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 if (id >= 0 && id < taskList.size()) {
@@ -103,18 +85,17 @@
             }
         }
     } catch (Exception e) {
-        // Gère silencieusement les erreurs
+
     }
 
-    // 4. Redirection (Post-Redirect-Get)
     if (listModified) {
         sessionHttp.setAttribute("taskList", taskList);
-        response.sendRedirect("TP-MGDT.jsp");
-        return; // TRÈS IMPORTANT
+        response.sendRedirect("TP-MGTC.jsp");
+        return;
     }
 %>
 
-
+// PArtie HTML
 <!DOCTYPE html>
 <html>
 <head>
@@ -144,11 +125,11 @@
 </head>
 <body>
 
-    <h1>📝 Mini Gestionnaire de Tâches Collaboratif</h1>
+    <h1>Gestionnaire de Tâches </h1>
 
     <h2>Ajouter une Tâche</h2>
     
-    <form action="TP-MGDT.jsp" method="post">
+    <form action="TP-MGTC.jsp" method="post">
         <input type="hidden" name="action" value="add">
         
         <div>
@@ -168,7 +149,7 @@
 
     <hr style="margin: 30px 0;">
 
-    <h2>📋 Liste des Tâches</h2>
+    <h2> Liste des Tâches</h2>
 
     <% 
         if (taskList != null && !taskList.isEmpty()) {
@@ -200,27 +181,27 @@
                         </td>
                         <td class="action-links">
                             <% if (!tache.isTerminee()) { %>
-                                <a href="TP-MGDT.jsp?action=complete&id=<%= i %>" class="complete">✅ Terminer</a>
+                                <a href="TP-MGDT.jsp?action=complete&id=<%= i %>" class="complete"> Tâche Réaliser </a>
                             <% } %>
                             
                             <a href="TP-MGDT.jsp?action=delete&id=<%= i %>" 
                                class="delete"
                                onclick="return confirm('Voulez-vous vraiment supprimer cette tâche ?');">
-                                ❌ Supprimer
+                                Supprimer la Tâche
                             </a>
                         </td>
                     </tr>
                 <% 
-                   } // Fin de la boucle for
+                   } 
                 %>
             </tbody>
         </table>
     <% 
         } else { 
     %>
-        <p>Aucune tâche n'a été ajoutée pour le moment.</p>
+        <p>Aucune tâche n'a été réalisée pour le moment.</p>
     <% 
-        } // Fin du if
+        } 
     %>
 
 </body>
