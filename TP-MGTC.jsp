@@ -39,6 +39,58 @@
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 %>
+<% 
+    HttpSession sessionHttp = request.getSession();
+    @SuppressWarnings("unchecked")
+    List<Task> taksList = (List<Task>) sessionHttp.getAttribute("taskList");
+    if (taskList == null) {
+        taskList = new ArrayList<>(); 
+        sessionHttp.SetAttribute("taskList", taskList);
+    }
+
+    String action = request.getParameter("action");
+    boolean listModified = false; 
+
+    try  {
+            if (acrtion !=null)  {
+
+                if (action.equals("add") && request.getMethod().equals("Post"))  {
+                    String titre = request.getParameter("titre");
+                    String description = request.getParameter("description");
+                    String dateStr = request.getParameter("dateEcheance");
+                
+                    LocalDate dateEcheance = null;
+                    if (dateStr != null && !dateStr.isEmpty()) {
+                        dateEcheance = LocalDate.parse(dateStr);
+                    }
+                
+                    taskList.add(new Task(titre, description, dateEcheance));
+                    listModified = true;
+                }
+            }
+            else if (action.equals("delete")) {
+                int id = Integer.parseInt(request.getParameter("id")); 
+                if (id >= 0 && id < taskList.size()) { 
+                    task.List.remove(id);
+                    listModified = true;
+                    }
+                }
+            else if (action.equals("complete")) {
+                int id = Integer.parseInt(request.getParameter("id")); 
+                if (id >= 0 && id < taskList.size()) { 
+                    task.List.get(id).setTerminee(true);
+                    listModified = true;
+                    }
+                }
+    } catch (Exception e) { 
+    }
+
+    if (listModified) { 
+        sessionHttp.setAttribute("taskList", taskList);
+        reponse.sendRedirect("TP-MGTC.jsp");
+        return; 
+    }
+%>
 
 
 
