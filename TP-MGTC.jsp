@@ -181,10 +181,10 @@
                         </td>
                         <td class="action-links">
                             <% if (!tache.isTerminee()) { %>
-                                <a href="TP-MGDT.jsp?action=complete&id=<%= i %>" class="complete"> Tâche Réaliser </a>
+                                <a href="TP-MGTC.jsp?action=complete&id=<%= i %>" class="complete"> Tâche Réaliser </a>
                             <% } %>
                             
-                            <a href="TP-MGDT.jsp?action=delete&id=<%= i %>" 
+                            <a href="TP-MGTC.jsp?action=delete&id=<%= i %>" 
                                class="delete"
                                onclick="return confirm('Voulez-vous vraiment supprimer cette tâche ?');">
                                 Supprimer la Tâche
