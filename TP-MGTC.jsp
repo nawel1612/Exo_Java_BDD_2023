@@ -95,7 +95,7 @@
     }
 %>
 
-// PArtie HTML
+
 <!DOCTYPE html>
 <html>
 <head>
